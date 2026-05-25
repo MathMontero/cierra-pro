@@ -80,6 +80,9 @@ export default function DashboardPage() {
         <button onClick={() => window.location.href = '/clientes/nuevo'} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-2xl text-lg transition-colors">
           ＋ Nuevo Cliente
         </button>
+        <button onClick={() => window.location.href = '/importar'} className="w-full bg-gray-900 hover:bg-gray-800 text-gray-300 font-semibold py-3 rounded-2xl text-sm transition-colors border border-gray-800">
+          📂 Importar clientes desde Excel/CSV
+        </button>
 
         {seguimientos.length > 0 && (
           <div>
