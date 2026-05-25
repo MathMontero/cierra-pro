@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import { pedirPermisoNotificaciones, registrarServiceWorker } from '@/lib/notificaciones'
 
 const NAV = [
   { emoji: '🏠', label: 'Inicio', href: '/dashboard' },
@@ -17,6 +18,9 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const init = async () => {
+      await pedirPermisoNotificaciones()
+      await registrarServiceWorker()
+
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { window.location.href = '/login'; return }
       const hoy = new Date().toISOString().split('T')[0]
@@ -80,6 +84,7 @@ export default function DashboardPage() {
         <button onClick={() => window.location.href = '/clientes/nuevo'} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-2xl text-lg transition-colors">
           ＋ Nuevo Cliente
         </button>
+
         <button onClick={() => window.location.href = '/importar'} className="w-full bg-gray-900 hover:bg-gray-800 text-gray-300 font-semibold py-3 rounded-2xl text-sm transition-colors border border-gray-800">
           📂 Importar clientes desde Excel/CSV
         </button>
