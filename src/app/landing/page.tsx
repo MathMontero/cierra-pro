@@ -1,5 +1,7 @@
 'use client'
 
+const WA = 'https://wa.me/5493624163340?text=' + encodeURIComponent('Hola! Me interesa Cierra+ PRO. ¿Me podés dar más información?')
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gray-950 text-white">
@@ -8,7 +10,7 @@ export default function LandingPage() {
         <h1 className="text-xl font-bold">Cierra+</h1>
         <div className="flex gap-3">
           <button onClick={() => window.location.href = '/login'} className="text-sm text-gray-400 hover:text-white">Iniciar sesión</button>
-          <button onClick={() => window.location.href = '/login'} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors">Empezar gratis</button>
+          <button onClick={() => window.open(WA, '_blank')} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors">Empezar</button>
         </div>
       </div>
 
@@ -24,10 +26,10 @@ export default function LandingPage() {
         <p className="text-gray-400 text-lg mb-8">
           Cierra+ te ayuda a gestionar tus clientes, hacer seguimientos y detectar oportunidades — todo desde el celular.
         </p>
-        <button onClick={() => window.location.href = '/login'} className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4 rounded-2xl text-lg transition-colors w-full max-w-sm">
-          Probalo gratis →
+        <button onClick={() => window.open(WA, '_blank')} className="bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-4 rounded-2xl text-lg transition-colors w-full max-w-sm flex items-center justify-center gap-2">
+          💬 Hablar por WhatsApp
         </button>
-        <p className="text-gray-500 text-sm mt-3">Sin tarjeta de crédito. Listo en 2 minutos.</p>
+        <p className="text-gray-500 text-sm mt-3">Te respondemos en minutos.</p>
       </div>
 
       {/* Features */}
@@ -63,7 +65,7 @@ export default function LandingPage() {
           </div>
           <div className="text-center mb-6">
             <p className="text-gray-400 text-sm">Cierra+ PRO</p>
-            <p className="text-4xl font-bold mt-1">$500<span className="text-lg text-gray-400">/MES 20 LOGINS POR EMPRESA!</span></p>
+            <p className="text-4xl font-bold mt-1">Consultanos<span className="text-lg text-gray-400"> el precio</span></p>
           </div>
           <div className="space-y-3 mb-6">
             {[
@@ -82,8 +84,8 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
-          <button onClick={() => window.location.href = '/login'} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition-colors">
-            Empezar ahora →
+          <button onClick={() => window.open(WA, '_blank')} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-2xl transition-colors flex items-center justify-center gap-2">
+            💬 Consultar por WhatsApp
           </button>
         </div>
       </div>
@@ -91,9 +93,9 @@ export default function LandingPage() {
       {/* CTA final */}
       <div className="px-6 py-12 text-center bg-gray-900 border-t border-gray-800">
         <h3 className="text-2xl font-bold mb-2">¿Listo para vender más?</h3>
-        <p className="text-gray-400 mb-6">Únite a los vendedores que ya usan Cierra+</p>
-        <button onClick={() => window.location.href = '/login'} className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4 rounded-2xl text-lg transition-colors">
-          Empezar gratis →
+        <p className="text-gray-400 mb-6">Hablemos y te mostramos cómo funciona</p>
+        <button onClick={() => window.open(WA, '_blank')} className="bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-4 rounded-2xl text-lg transition-colors flex items-center justify-center gap-2 mx-auto">
+          💬 Hablar por WhatsApp
         </button>
       </div>
     </div>
