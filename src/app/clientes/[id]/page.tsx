@@ -132,6 +132,7 @@ export default function ClienteDetallePage({ params }: { params: { id: string } 
         <div className="bg-gray-900 rounded-2xl p-4 border border-gray-800 space-y-3">
           <p className="text-gray-400 text-xs font-semibold">DETALLES</p>
           {[
+            { label: 'DNI', valor: cliente.dni },
             { label: 'Producto', valor: cliente.producto },
             { label: 'Marca', valor: cliente.marca },
             { label: 'Modelo', valor: cliente.modelo },

@@ -52,6 +52,7 @@ export default function DashboardPage() {
           <div className="flex items-center gap-3">
             <button onClick={() => window.location.href = '/estadisticas'} className="text-xs text-gray-400 hover:text-white">📈</button>
             <button onClick={() => window.location.href = '/configuracion'} className="text-xs text-gray-400 hover:text-white">⚙️</button>
+            <button onClick={() => window.location.href = '/admin'} className="text-xs text-gray-400 hover:text-white">👑</button>
             <button onClick={() => supabase.auth.signOut().then(() => window.location.href = '/login')} className="text-xs text-gray-400 hover:text-white">Salir</button>
           </div>
         </div>
@@ -88,6 +89,7 @@ export default function DashboardPage() {
         <button onClick={() => window.location.href = '/importar'} className="w-full bg-gray-900 hover:bg-gray-800 text-gray-300 font-semibold py-3 rounded-2xl text-sm transition-colors border border-gray-800">
           📂 Importar clientes desde Excel/CSV
         </button>
+
         <button onClick={() => window.location.href = '/reactivacion'} className="w-full bg-gray-900 hover:bg-gray-800 text-gray-300 font-semibold py-3 rounded-2xl text-sm transition-colors border border-gray-800">
           ♻️ Reactivar clientes inactivos
         </button>

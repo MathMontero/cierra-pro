@@ -67,6 +67,7 @@ export default function EditarClientePage({ params }: { params: { id: string } }
           <p className="text-gray-400 text-xs font-semibold">DATOS PERSONALES</p>
           {campo('Nombre *', 'nombre')}
           {campo('Teléfono', 'telefono')}
+          {campo('DNI', 'dni')}
         </div>
 
         <div className="bg-gray-900 rounded-2xl p-4 border border-gray-800 space-y-3">

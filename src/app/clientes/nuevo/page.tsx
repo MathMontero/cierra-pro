@@ -90,6 +90,12 @@ export default function NuevoClientePage() {
               className="w-full bg-gray-900 text-white rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-gray-800"
             />
             <input
+              placeholder="DNI"
+              value={datos.dni || ''}
+              onChange={e => setDatos((p: any) => ({ ...p, dni: e.target.value }))}
+              className="w-full bg-gray-900 text-white rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 border border-gray-800"
+/>
+            <input
               placeholder="Producto que busca"
               value={datos.producto || ''}
               onChange={e => setDatos((p: any) => ({ ...p, producto: e.target.value }))}
