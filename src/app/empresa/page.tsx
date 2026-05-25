@@ -18,7 +18,7 @@ export default function EmpresaPage() {
 
       const { data: perfil } = await supabase
         .from('users')
-        .select('*, empresas(*)')
+        .select('*')
         .eq('id', user.id)
         .single()
 
@@ -46,6 +46,7 @@ export default function EmpresaPage() {
     if (!nombreEmpresa) return
     setCreando(true)
     const { data: { user } } = await supabase.auth.getUser()
+    console.log('user id:', user!.id)
 
     const { data: emp, error } = await supabase
       .from('empresas')
@@ -53,13 +54,20 @@ export default function EmpresaPage() {
       .select()
       .single()
 
-    if (!error && emp) {
-      await supabase.from('users').update({
-        empresa_id: emp.id,
-        rol: 'admin'
-      }).eq('id', user!.id)
-      setEmpresa(emp)
+    console.log('emp:', emp, 'error:', error)
+
+    if (error) {
+      alert('Error: ' + error.message)
+      setCreando(false)
+      return
     }
+
+    await supabase.from('users').update({
+      empresa_id: emp.id,
+      rol: 'admin'
+    }).eq('id', user!.id)
+
+    setEmpresa(emp)
     setCreando(false)
   }
 
@@ -80,7 +88,7 @@ export default function EmpresaPage() {
     if (!error) {
       const link = `${window.location.origin}/unirse?token=${token}`
       await navigator.clipboard.writeText(link)
-      alert(`Link copiado al portapapeles:\n${link}`)
+      alert(`Link copiado:\n${link}`)
       setEmailInvitar('')
     }
     setInvitando(false)
@@ -103,7 +111,7 @@ export default function EmpresaPage() {
         {!empresa ? (
           <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 space-y-4">
             <p className="text-white font-semibold">Crear empresa</p>
-            <p className="text-gray-400 text-sm">Creá tu empresa para invitar vendedores a tu equipo.</p>
+            <p className="text-gray-400 text-sm">Creá tu empresa para invitar vendedores.</p>
             <input
               placeholder="Nombre de la empresa"
               value={nombreEmpresa}
@@ -139,9 +147,9 @@ export default function EmpresaPage() {
                 disabled={!emailInvitar || invitando}
                 className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-40 text-white font-semibold py-3 rounded-xl"
               >
-                {invitando ? 'Generando link...' : '🔗 Generar link de invitación'}
+                {invitando ? 'Generando...' : '🔗 Generar link de invitación'}
               </button>
-              <p className="text-gray-500 text-xs">El link se copia automáticamente. Mandáselo al vendedor por WhatsApp.</p>
+              <p className="text-gray-500 text-xs">El link se copia automáticamente.</p>
             </div>
 
             <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
