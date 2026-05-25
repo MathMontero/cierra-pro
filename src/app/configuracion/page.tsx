@@ -110,6 +110,12 @@ export default function ConfiguracionPage() {
         <button onClick={guardar} disabled={guardando} className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white font-semibold py-4 rounded-2xl transition-colors">
           {guardando ? '⏳ Guardando...' : '✅ Guardar cambios'}
         </button>
+        <button
+          onClick={() => window.location.href = '/empresa'}
+          className="w-full bg-gray-900 hover:bg-gray-800 text-gray-300 font-semibold py-4 rounded-2xl transition-colors border border-gray-800"
+        >
+          🏢 Gestionar empresa y equipo
+        </button>
 
         <button
           onClick={() => supabase.auth.signOut().then(() => window.location.href = '/login')}
