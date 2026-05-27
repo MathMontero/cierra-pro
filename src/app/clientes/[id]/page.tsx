@@ -19,6 +19,8 @@ export default function ClienteDetallePage({ params }: { params: { id: string } 
   const [guardando, setGuardando] = useState(false)
   const [mostrarSeguimiento, setMostrarSeguimiento] = useState(false)
   const [nuevoSeg, setNuevoSeg] = useState({ tipo: 'whatsapp', observaciones: '', fecha: new Date().toISOString().slice(0, 16) })
+  const [notaRapida, setNotaRapida] = useState('')
+  const [guardandoNota, setGuardandoNota] = useState(false)
   const { toast, mostrar, cerrar } = useToast()
 
   useEffect(() => {
@@ -54,6 +56,20 @@ export default function ClienteDetallePage({ params }: { params: { id: string } 
       setNuevoSeg({ tipo: 'whatsapp', observaciones: '', fecha: new Date().toISOString().slice(0, 16) })
     }
     setGuardando(false)
+  }
+
+  const guardarNotaRapida = async () => {
+    if (!notaRapida) return
+    setGuardandoNota(true)
+    const fecha = new Date().toLocaleDateString('es-AR')
+    const nuevaObs = cliente.observaciones
+      ? `${cliente.observaciones}\n[${fecha}] ${notaRapida}`
+      : `[${fecha}] ${notaRapida}`
+    await supabase.from('clientes').update({ observaciones: nuevaObs }).eq('id', params.id)
+    setCliente((p: any) => ({ ...p, observaciones: nuevaObs }))
+    setNotaRapida('')
+    mostrar('Nota guardada')
+    setGuardandoNota(false)
   }
 
   const eliminar = async () => {
@@ -130,6 +146,24 @@ export default function ClienteDetallePage({ params }: { params: { id: string } 
         <button onClick={() => window.location.href = `/clientes/${params.id}/historial`} className="w-full bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold py-3 rounded-2xl transition-colors">
           📋 Ver historial completo
         </button>
+
+        <div className="bg-gray-900 rounded-2xl p-4 border border-gray-800 space-y-3">
+          <p className="text-gray-400 text-xs font-semibold">📝 NOTA RÁPIDA</p>
+          <textarea
+            placeholder="Agregá una nota rápida..."
+            value={notaRapida}
+            onChange={e => setNotaRapida(e.target.value)}
+            rows={2}
+            className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm"
+          />
+          <button
+            onClick={guardarNotaRapida}
+            disabled={!notaRapida || guardandoNota}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white font-semibold py-2 rounded-xl text-sm"
+          >
+            {guardandoNota ? 'Guardando...' : '💾 Guardar nota'}
+          </button>
+        </div>
 
         <div className="bg-gray-900 rounded-2xl p-4 border border-gray-800">
           <p className="text-gray-400 text-xs font-semibold mb-3">ESTADO</p>
