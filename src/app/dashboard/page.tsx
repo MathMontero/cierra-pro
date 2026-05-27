@@ -54,6 +54,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-white">Dashboard</h1>
           <div className="flex items-center gap-3">
+            <button onClick={() => window.location.href = '/buscar'} className="text-xs text-gray-400 hover:text-white">🔍</button>
             <button onClick={() => window.location.href = '/estadisticas'} className="text-xs text-gray-400 hover:text-white">📈</button>
             <button onClick={() => window.location.href = '/configuracion'} className="text-xs text-gray-400 hover:text-white">⚙️</button>
             {esAdmin && (
