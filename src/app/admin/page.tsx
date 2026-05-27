@@ -9,61 +9,64 @@ export default function AdminPage() {
   const [stats, setStats] = useState<any>({})
 
   useEffect(() => {
-    const cargar = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { window.location.href = '/login'; return }
+  const cargar = async () => {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) { window.location.href = '/login'; return }
 
-      const { data: perfil } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', user.id)
-        .single()
+    const { data: perfil } = await supabase
+      .from('users')
+      .select('es_admin')
+      .eq('id', user.id)
+      .single()
 
-      if (!perfil?.es_admin) {
-        window.location.href = '/dashboard'
-        return
-      }
+    console.log('perfil admin:', perfil)
 
-      setAutorizado(true)
-
-      const { data: users } = await supabase
-        .from('users')
-        .select('*')
-        .order('fecha_registro', { ascending: false })
-
-      setUsuarios(users || [])
-
-      const { count: totalClientes } = await supabase
-        .from('clientes')
-        .select('*', { count: 'exact', head: true })
-
-      const { count: totalSeguimientos } = await supabase
-        .from('seguimientos')
-        .select('*', { count: 'exact', head: true })
-
-      setStats({
-        totalUsuarios: users?.length || 0,
-        totalClientes,
-        totalSeguimientos,
-      })
-
-      setLoading(false)
+    if (!perfil?.es_admin) {
+      window.location.href = '/dashboard'
+      return
     }
-    cargar()
-  }, [])
+
+    setAutorizado(true)
+
+    const [
+      { data: users },
+      { count: totalClientes },
+      { count: totalSeguimientos }
+    ] = await Promise.all([
+      supabase.from('users').select('*').order('fecha_registro', { ascending: false }),
+      supabase.from('clientes').select('*', { count: 'exact', head: true }),
+      supabase.from('seguimientos').select('*', { count: 'exact', head: true }),
+    ])
+
+    setUsuarios(users || [])
+    setStats({
+      totalUsuarios: users?.length || 0,
+      totalClientes: totalClientes || 0,
+      totalSeguimientos: totalSeguimientos || 0,
+    })
+    setLoading(false)
+  }
+  cargar()
+}, [])
 
   const toggleAdmin = async (userId: string, esAdmin: boolean) => {
     await supabase.from('users').update({ es_admin: !esAdmin }).eq('id', userId)
     setUsuarios(prev => prev.map(u => u.id === userId ? { ...u, es_admin: !esAdmin } : u))
   }
 
+  if (loading && !autorizado) return (
+    <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <p className="text-gray-400">Verificando acceso...</p>
+    </div>
+  )
+
+  if (!autorizado) return null
+
   if (loading) return (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center">
       <p className="text-gray-400">Cargando...</p>
     </div>
   )
-
-  if (!autorizado) return null
 
   return (
     <div className="min-h-screen bg-gray-950 pb-10">
@@ -113,7 +116,7 @@ export default function AdminPage() {
                       u.es_admin ? 'bg-red-900 text-red-400' : 'bg-gray-800 text-gray-400'
                     }`}
                   >
-                    {u.es_admin ? 'Quitar admin' : 'Hacer admin'}
+                    {u.es_admin ? 'Quitar' : 'Admin'}
                   </button>
                 </div>
               </div>

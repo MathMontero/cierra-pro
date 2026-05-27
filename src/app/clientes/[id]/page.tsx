@@ -99,6 +99,12 @@ export default function ClienteDetallePage({ params }: { params: { id: string } 
         <button onClick={() => setMostrarSeguimiento(!mostrarSeguimiento)} className="w-full bg-purple-900 hover:bg-purple-800 text-purple-300 font-semibold py-3 rounded-2xl transition-colors">
           ⏰ Agendar seguimiento
         </button>
+        <button
+          onClick={() => window.location.href = `/clientes/${params.id}/historial`}
+          className="w-full bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold py-3 rounded-2xl transition-colors"
+        >
+          📋 Ver historial completo
+        </button>
 
         {mostrarSeguimiento && (
           <div className="bg-gray-900 rounded-2xl p-4 border border-purple-800 space-y-3">

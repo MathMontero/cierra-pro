@@ -15,6 +15,7 @@ export default function DashboardPage() {
   const [clientes, setClientes] = useState<any[]>([])
   const [seguimientos, setSeguimientos] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [esAdmin, setEsAdmin] = useState(false)
 
   useEffect(() => {
     const init = async () => {
@@ -23,13 +24,16 @@ export default function DashboardPage() {
 
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { window.location.href = '/login'; return }
+
       const hoy = new Date().toISOString().split('T')[0]
-      const [{ data: clientesData }, { data: segsData }] = await Promise.all([
+      const [{ data: clientesData }, { data: segsData }, { data: perfil }] = await Promise.all([
         supabase.from('clientes').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
         supabase.from('seguimientos').select('*, clientes(nombre, telefono)').eq('completado', false).lte('fecha', hoy + 'T23:59:59'),
+        supabase.from('users').select('es_admin').eq('id', user.id).single(),
       ])
       setClientes(clientesData || [])
       setSeguimientos(segsData || [])
+      setEsAdmin(perfil?.es_admin || false)
       setLoading(false)
     }
     init()
@@ -52,7 +56,9 @@ export default function DashboardPage() {
           <div className="flex items-center gap-3">
             <button onClick={() => window.location.href = '/estadisticas'} className="text-xs text-gray-400 hover:text-white">📈</button>
             <button onClick={() => window.location.href = '/configuracion'} className="text-xs text-gray-400 hover:text-white">⚙️</button>
-            <button onClick={() => window.location.href = '/admin'} className="text-xs text-gray-400 hover:text-white">👑</button>
+            {esAdmin && (
+              <button onClick={() => window.location.href = '/admin'} className="text-xs text-gray-400 hover:text-white">👑</button>
+            )}
             <button onClick={() => supabase.auth.signOut().then(() => window.location.href = '/login')} className="text-xs text-gray-400 hover:text-white">Salir</button>
           </div>
         </div>
