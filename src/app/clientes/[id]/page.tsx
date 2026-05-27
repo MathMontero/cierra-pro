@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import { Toast, useToast } from '@/components/Toast'
 
 const ESTADOS = ['nuevo', 'seguimiento', 'financiera', 'aprobado', 'vendido', 'perdido']
 const TIPOS_SEGUIMIENTO = ['whatsapp', 'llamada', 'presencial', 'financiera']
@@ -18,6 +19,7 @@ export default function ClienteDetallePage({ params }: { params: { id: string } 
   const [guardando, setGuardando] = useState(false)
   const [mostrarSeguimiento, setMostrarSeguimiento] = useState(false)
   const [nuevoSeg, setNuevoSeg] = useState({ tipo: 'whatsapp', observaciones: '', fecha: new Date().toISOString().slice(0, 16) })
+  const { toast, mostrar, cerrar } = useToast()
 
   useEffect(() => {
     const cargar = async () => {
@@ -32,22 +34,26 @@ export default function ClienteDetallePage({ params }: { params: { id: string } 
     setGuardando(true)
     await supabase.from('clientes').update({ estado: nuevoEstado }).eq('id', params.id)
     setCliente((p: any) => ({ ...p, estado: nuevoEstado }))
+    mostrar(`Estado actualizado: ${nuevoEstado}`)
     setGuardando(false)
   }
 
   const guardarSeguimiento = async () => {
     setGuardando(true)
-    await supabase.from('seguimientos').insert({
+    const { error } = await supabase.from('seguimientos').insert({
       cliente_id: params.id,
       tipo: nuevoSeg.tipo,
       observaciones: nuevoSeg.observaciones,
       fecha: nuevoSeg.fecha,
       completado: false,
     })
-    setMostrarSeguimiento(false)
-    setNuevoSeg({ tipo: 'whatsapp', observaciones: '', fecha: new Date().toISOString().slice(0, 16) })
+    if (error) mostrar('Error al guardar', 'error')
+    else {
+      mostrar('Seguimiento guardado')
+      setMostrarSeguimiento(false)
+      setNuevoSeg({ tipo: 'whatsapp', observaciones: '', fecha: new Date().toISOString().slice(0, 16) })
+    }
     setGuardando(false)
-    alert('Seguimiento guardado')
   }
 
   const eliminar = async () => {
@@ -70,6 +76,8 @@ export default function ClienteDetallePage({ params }: { params: { id: string } 
 
   return (
     <div className="min-h-screen bg-gray-950 pb-24">
+      {toast && <Toast mensaje={toast.mensaje} tipo={toast.tipo} onClose={cerrar} />}
+
       <div className="bg-gray-900 px-4 pt-12 pb-4 border-b border-gray-800 flex items-center gap-3">
         <button onClick={() => window.location.href = '/clientes'} className="text-gray-400 hover:text-white text-xl">←</button>
         <h1 className="text-xl font-bold text-white flex-1">{cliente.nombre}</h1>
@@ -86,6 +94,7 @@ export default function ClienteDetallePage({ params }: { params: { id: string } 
             <h2 className="text-white font-bold text-lg">{cliente.nombre}</h2>
             {cliente.telefono && <p className="text-gray-400 text-sm">{cliente.telefono}</p>}
             {cliente.producto && <p className="text-gray-400 text-sm">{cliente.producto}</p>}
+            {cliente.dni && <p className="text-gray-400 text-sm">DNI: {cliente.dni}</p>}
           </div>
         </div>
 
@@ -98,12 +107,6 @@ export default function ClienteDetallePage({ params }: { params: { id: string } 
 
         <button onClick={() => setMostrarSeguimiento(!mostrarSeguimiento)} className="w-full bg-purple-900 hover:bg-purple-800 text-purple-300 font-semibold py-3 rounded-2xl transition-colors">
           ⏰ Agendar seguimiento
-        </button>
-        <button
-          onClick={() => window.location.href = `/clientes/${params.id}/historial`}
-          className="w-full bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold py-3 rounded-2xl transition-colors"
-        >
-          📋 Ver historial completo
         </button>
 
         {mostrarSeguimiento && (
@@ -124,6 +127,10 @@ export default function ClienteDetallePage({ params }: { params: { id: string } 
           </div>
         )}
 
+        <button onClick={() => window.location.href = `/clientes/${params.id}/historial`} className="w-full bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold py-3 rounded-2xl transition-colors">
+          📋 Ver historial completo
+        </button>
+
         <div className="bg-gray-900 rounded-2xl p-4 border border-gray-800">
           <p className="text-gray-400 text-xs font-semibold mb-3">ESTADO</p>
           <div className="grid grid-cols-3 gap-2">
@@ -138,10 +145,10 @@ export default function ClienteDetallePage({ params }: { params: { id: string } 
         <div className="bg-gray-900 rounded-2xl p-4 border border-gray-800 space-y-3">
           <p className="text-gray-400 text-xs font-semibold">DETALLES</p>
           {[
-            { label: 'DNI', valor: cliente.dni },
             { label: 'Producto', valor: cliente.producto },
             { label: 'Marca', valor: cliente.marca },
             { label: 'Modelo', valor: cliente.modelo },
+            { label: 'DNI', valor: cliente.dni },
             { label: 'Monto estimado', valor: cliente.monto_estimado ? `$${Number(cliente.monto_estimado).toLocaleString()}` : null },
             { label: 'Financiera', valor: cliente.financiera_usada },
             { label: 'Cuotas', valor: cliente.cantidad_cuotas },
