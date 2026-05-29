@@ -103,7 +103,7 @@ export default function RadarPage() {
                       <span>🎯 {info.probabilidad}% prob.</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      {c.telefono && <a href={`https://wa.me/${c.telefono}`} className="bg-green-900 text-green-400 text-xs font-medium py-2 rounded-xl text-center">💬 WhatsApp</a>}
+                      {c.telefono && <a href={`https://wa.me/${c.telefono}`} target="_blank" rel="noopener noreferrer" className="bg-green-900 text-green-400 text-xs font-medium py-2 rounded-xl text-center">💬 WhatsApp</a>}
                       <button onClick={() => window.location.href = `/clientes/${c.id}`} className="bg-gray-800 text-gray-300 text-xs font-medium py-2 rounded-xl">Ver historial</button>
                     </div>
                   </div>

@@ -124,7 +124,7 @@ export default function ReactivacionPage() {
                       <p className="text-gray-400 text-xs">{c.producto || 'Sin producto'} · {diasInactivo(c.updated_at)} días sin contacto</p>
                     </div>
                     {c.telefono && (
-                      <a href={`https://wa.me/${c.telefono}?text=${mensajeWhatsApp(c.nombre)}`} target="_blank" className="w-8 h-8 bg-green-900 rounded-lg flex items-center justify-center text-green-400 text-sm flex-shrink-0">
+                      <a href={`https://wa.me/${c.telefono}?text=${mensajeWhatsApp(c.nombre)}`} target="_blank" rel="noopener noreferrer" target="_blank" className="w-8 h-8 bg-green-900 rounded-lg flex items-center justify-center text-green-400 text-sm flex-shrink-0">
                         💬
                       </a>
                     )}

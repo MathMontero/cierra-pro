@@ -67,7 +67,7 @@ export default function SeguimientosPage() {
                 {s.observaciones && <p className="text-gray-400 text-sm mb-3">{s.observaciones}</p>}
                 <div className="flex gap-2">
                   {s.clientes?.telefono && (
-                    <a href={`https://wa.me/${s.clientes.telefono}`} className="flex-1 bg-green-900 text-green-400 text-xs font-medium py-2 rounded-xl text-center">💬 WhatsApp</a>
+                    <a href={`https://wa.me/${s.clientes.telefono}`} target="_blank" rel="noopener noreferrer" className="flex-1 bg-green-900 text-green-400 text-xs font-medium py-2 rounded-xl text-center">💬 WhatsApp</a>
                   )}
                   <button onClick={() => completar(s.id)} className="flex-1 bg-blue-600 text-white text-xs font-medium py-2 rounded-xl">✅ Completado</button>
                 </div>

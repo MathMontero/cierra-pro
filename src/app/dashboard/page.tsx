@@ -144,7 +144,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   {c.telefono && (
-                    <a href={`https://wa.me/${c.telefono}`} onClick={e => e.stopPropagation()} className="w-8 h-8 bg-green-900 rounded-lg flex items-center justify-center text-green-400 text-sm">💬</a>
+                    <a href={`https://wa.me/${c.telefono}`} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="w-8 h-8 bg-green-900 rounded-lg flex items-center justify-center text-green-400 text-sm">💬</a>
                   )}
                 </div>
               ))}
