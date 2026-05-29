@@ -100,9 +100,12 @@ export default function ClienteDetallePage({ params }: { params: { id: string } 
         </div>
         {cliente.telefono && (
           <div className="grid grid-cols-2 gap-3">
-            <a href={'https://wa.me/' + cliente.telefono} target="_blank" rel="noopener noreferrer" className="bg-green-900 text-green-400 font-semibold py-3 rounded-2xl text-center" >
-              WhatsApp
-            </a>
+            <button
+  onClick={() => window.open('https://wa.me/' + cliente.telefono, '_blank')}
+  className="bg-green-900 text-green-400 font-semibold py-3 rounded-2xl text-center w-full"
+>
+  💬 WhatsApp
+</button>
             <a href={'tel:' + cliente.telefono} className="bg-blue-900 text-blue-400 font-semibold py-3 rounded-2xl text-center">
               Llamar
             </a>
