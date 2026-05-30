@@ -94,12 +94,18 @@ export default function ImportarPage() {
           telefono: '',
           observaciones: contenido.slice(0, 200),
           producto: '',
+          dni: '',
         }
       }
 
       const telMatch = contenido.match(/(\+?[\d\s\-]{8,15})/)
       if (telMatch && !clientesMap[autor].telefono) {
         clientesMap[autor].telefono = telMatch[1].replace(/\s|-/g, '')
+      }
+
+      const dniMatch = contenido.match(/dni[:\s]*(\d{7,8})/i)
+      if (dniMatch && !clientesMap[autor].dni) {
+        clientesMap[autor].dni = dniMatch[1]
       }
 
       const palabrasProducto = ['moto', 'auto', 'heladera', 'lavarropas', 'tv', 'celular', 'notebook', 'aire', 'frozen', 'wave', 'bajaj', 'honda', 'yamaha']
@@ -123,6 +129,7 @@ export default function ImportarPage() {
       producto: buscar(['producto', 'product', 'articulo']),
       monto: buscar(['monto', 'precio', 'price', 'importe']),
       observaciones: buscar(['observacion', 'nota', 'comentario']),
+      dni: buscar(['dni', 'documento', 'cedula', 'id']),
     }
     return filas.map(fila => ({
       nombre: fila[mapeo.nombre] || '',
@@ -130,6 +137,7 @@ export default function ImportarPage() {
       producto: fila[mapeo.producto] || '',
       monto_estimado: fila[mapeo.monto] ? Number(String(fila[mapeo.monto]).replace(/[^0-9.]/g, '')) : null,
       observaciones: fila[mapeo.observaciones] || '',
+      dni: fila[mapeo.dni] ? String(fila[mapeo.dni]) : '',
     })).filter(c => c.nombre)
   }
 
@@ -195,13 +203,27 @@ export default function ImportarPage() {
                   </div>
                   <div>
                     <p className="text-white text-sm">{c.nombre}</p>
-                    <p className="text-gray-400 text-xs">{c.telefono} {c.producto && '· ' + c.producto}</p>
+                    <p className="text-gray-400 text-xs">
+                      {c.telefono && c.telefono + ' · '}
+                      {c.producto && c.producto + ' · '}
+                      {c.dni && 'DNI: ' + c.dni}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
         )}
+
+        <div className="bg-gray-900 rounded-2xl p-4 border border-gray-800">
+          <p className="text-gray-400 text-xs font-semibold mb-2">FORMATO RECOMENDADO</p>
+          <p className="text-gray-400 text-xs">Columnas que detectamos automáticamente:</p>
+          <div className="mt-2 space-y-1">
+            {['nombre / cliente', 'telefono / celular', 'producto / articulo', 'monto / precio', 'dni / documento', 'observaciones / notas'].map((c, i) => (
+              <p key={i} className="text-gray-300 text-xs">• {c}</p>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 flex justify-around py-3">
